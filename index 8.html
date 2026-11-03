@@ -1,0 +1,275 @@
+
+<!DOCTYPE html>
+<html ng-app="fashionApp">
+
+<head>
+    <title>Fashion Boutique - AngularJS</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #fff0f5;
+            margin: 20px;
+        }
+
+        h1 {
+            background-color: #c2185b;
+            color: white;
+            text-align: center;
+            padding: 15px;
+        }
+
+        h2 {
+            color: #c2185b;
+        }
+
+        .box {
+            background-color: white;
+            padding: 20px;
+            margin: 20px auto;
+            width: 80%;
+            border: 1px solid #e1a0b8;
+            border-radius: 10px;
+        }
+
+        input, select, textarea {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #c2185b;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #880e4f;
+        }
+
+        li {
+            padding: 8px;
+        }
+
+        .delete {
+            background-color: red;
+            margin-left: 15px;
+        }
+
+        .delete:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>FASHION BOUTIQUE</h1>
+
+<center>
+    <p>Style Yourself | Explore Fashion | Look Beautiful</p>
+</center>
+
+
+<!-- 1. CUSTOMER REVIEW BOX -->
+
+<div class="box" ng-controller="ReviewController">
+
+    <h2>1. Customer Review Box</h2>
+
+    <h3>Post Your Review</h3>
+
+    <textarea ng-model="txtreview"
+              placeholder="Write Your Review"
+              rows="4"
+              cols="50"></textarea>
+
+    <br><br>
+
+    <button ng-click="addReview()">Post Review</button>
+
+    <h3>Customer Reviews</h3>
+
+    <ul>
+        <li ng-repeat="r in reviews track by $index">
+            {{r}}
+
+            <button class="delete"
+                    ng-click="removeReview($index)">
+                Delete
+            </button>
+        </li>
+    </ul>
+
+</div>
+
+
+<!-- 2. FASHION CALCULATOR -->
+
+<div class="box" ng-controller="CalculatorController">
+
+    <h2>2. Fashion Discount Calculator</h2>
+
+    <p>Enter First Amount:</p>
+
+    <input type="number" ng-model="a">
+
+    <p>Enter Second Amount:</p>
+
+    <input type="number" ng-model="b">
+
+    <p>Select Operation:</p>
+
+    <select ng-model="operator">
+        <option value="+">Addition (+)</option>
+        <option value="-">Subtraction (-)</option>
+        <option value="*">Multiplication (*)</option>
+        <option value="/">Division (/)</option>
+    </select>
+
+    <h3>Result: {{calculate()}}</h3>
+
+</div>
+
+
+<!-- 3. SHOPPING TO-DO LIST -->
+
+<div class="box" ng-controller="TodoController">
+
+    <h2>3. Fashion Shopping To-Do List</h2>
+
+    <p>Enter a Shopping Activity:</p>
+
+    <input type="text"
+           ng-model="title"
+           placeholder="Enter Shopping Activity">
+
+    <button ng-click="add()">Add</button>
+
+    <h3>Shopping Activities</h3>
+
+    <ul>
+        <li ng-repeat="t in tasks track by $index">
+            {{t}}
+
+            <button class="delete"
+                    ng-click="remove($index)">
+                Delete
+            </button>
+        </li>
+    </ul>
+
+</div>
+
+
+<script>
+
+// MAIN ANGULARJS APPLICATION
+
+var app = angular.module("fashionApp", []);
+
+
+// 1. CUSTOMER REVIEW CONTROLLER
+
+app.controller("ReviewController", function($scope) {
+
+    $scope.reviews = [];
+
+    $scope.addReview = function() {
+
+        if($scope.txtreview && $scope.txtreview.trim()) {
+
+            $scope.reviews.push($scope.txtreview);
+
+            $scope.txtreview = "";
+        }
+
+    };
+
+    $scope.removeReview = function(index) {
+
+        $scope.reviews.splice(index, 1);
+
+    };
+
+});
+
+
+// 2. CALCULATOR CONTROLLER
+
+app.controller("CalculatorController", function($scope) {
+
+    $scope.calculate = function() {
+
+        if($scope.a === undefined ||
+           $scope.b === undefined ||
+           !$scope.operator) {
+
+            return 0;
+        }
+
+        if($scope.operator == "+") {
+            return $scope.a + $scope.b;
+        }
+
+        if($scope.operator == "-") {
+            return $scope.a - $scope.b;
+        }
+
+        if($scope.operator == "*") {
+            return $scope.a * $scope.b;
+        }
+
+        if($scope.operator == "/") {
+
+            if($scope.b == 0) {
+                return "Cannot divide by zero";
+            }
+
+            return $scope.a / $scope.b;
+        }
+
+    };
+
+});
+
+
+// 3. SHOPPING TODO LIST CONTROLLER
+
+app.controller("TodoController", function($scope) {
+
+    $scope.tasks = [
+        "Buy New Dresses",
+        "Select Fashion Accessories"
+    ];
+
+    $scope.add = function() {
+
+        if($scope.title && $scope.title.trim()) {
+
+            $scope.tasks.push($scope.title);
+
+            $scope.title = "";
+        }
+
+    };
+
+    $scope.remove = function(index) {
+
+        $scope.tasks.splice(index, 1);
+
+    };
+
+});
+
+</script>
+
+</body>
+</html>
